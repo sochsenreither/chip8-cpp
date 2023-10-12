@@ -12,7 +12,6 @@ add_subdirectory(vendor/SDL)
 
 set(HEADERS
     core/chip8.h
-    core/cpu.h
     core/keypad.h
     core/memory.h
     core/display.h
@@ -23,10 +22,7 @@ set(HEADERS
 set(SOURCES
     main.cpp
     core/chip8.cpp
-    core/cpu.cpp
-    core/keypad.cpp
     core/memory.cpp
-    core/display.cpp
     engine/engine.cpp
     engine/window.cpp
 )

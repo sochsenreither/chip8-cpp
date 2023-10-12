@@ -1,5 +1,7 @@
 #include "chip8.h"
 
+#include <iostream>
+
 void Chip8::reset() {
     memory.reset();
     keypad.reset();
@@ -29,6 +31,10 @@ bool Chip8::update_sound_timer() {
         sound_timer--;
     }
     return sound_timer > 0;
+}
+
+void Chip8::set_key(int key, int val) {
+    keypad[key] = val;
 }
 
 void Chip8::tick() {
@@ -137,6 +143,10 @@ void Chip8::tick() {
         default:
             return;
     }
+}
+
+uint8_t Chip8::get_pixel(int i) {
+    return display[i];
 }
 
 // CLS: Clear the display.
@@ -329,10 +339,9 @@ void Chip8::rnd(int x, int kk) {
 // outside the coordinates of the display, it wraps around to the opposite side of the screen.
 void Chip8::drw(int x, int y, int n) {
     // std::cout << __func__ << std::endl;
-    auto height = n;
     regs[0xF] = 0;
 
-    for (auto row = 0; row < height; row++) {
+    for (auto row = 0; row < n; row++) {
         auto sprite = memory[I + row];
         for (auto col = 0; col < 8; col++) {
             if (sprite & (0b10000000 >> col)) {
@@ -341,8 +350,8 @@ void Chip8::drw(int x, int y, int n) {
                 auto pixel = px + py * display.m_width;
                 if (display[pixel]) {
                     regs[0x0F] = 1;
-                    display[pixel] ^=1 ;
                 }
+                display[pixel] ^= 1;
             }
         }
     }

@@ -12,7 +12,10 @@ class Chip8 {
     void load_rom(std::string filename);
     void update_delay_timer();
     bool update_sound_timer();
+    void set_key(int key, int val);
     void tick();
+
+    uint8_t get_pixel(int i);
 
    private:
     std::array<uint8_t, 0x10> regs = {0};
