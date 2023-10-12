@@ -3,25 +3,29 @@
 #include <chrono>
 #include <iostream>
 
-bool Engine::init() {
+// Initializes a SDL window.
+bool Engine::init(int cycles, float fps) {
+    cycles_per_second = cycles;
+    frames_per_second = fps;
     auto res_window = window.init(Display::width(), Display::height(), "Chip8");
     return res_window;
 }
 
+// Loads a rom
 void Engine::load_rom(std::string filename) {
     chip8.reset();
     chip8.load_rom(filename);
 }
 
+// Starts the emulator. Frames per second are currently fixed to 60.
 void Engine::start() {
     auto get_time = [] { return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count(); };
 
     auto start = get_time();
 
-    // TODO: fixed for 60 fps
     while (window.running) {
         auto delta = get_time() - start;
-        if (delta > (1000.0/60.0)) {
+        if (delta > (1000.0 / frames_per_second)) {
             start = get_time();
             update();
             draw();
@@ -29,21 +33,18 @@ void Engine::start() {
     }
 }
 
+// Updates the internal chip8 state, polls for keyboard input and then runs 10 cpu cycles.
 void Engine::update() {
-    // TODO: fixed for 10 instructions per second
-    auto cycles = 10;
-
     chip8.update_delay_timer();
 
-    window.poll_events([&](int key, int val) {
-        chip8.set_key(key, val);
-    });
+    window.poll_events(&chip8);
 
-    for (auto i = 0; i < cycles; i++) {
+    for (auto i = 0; i < cycles_per_second; i++) {
         chip8.tick();
     }
 }
 
+// Draws every pixel of the window that needs to be drawn.
 void Engine::draw() {
     window.clear_screen();
     for (auto y = 0; y < Display::m_height; y++) {

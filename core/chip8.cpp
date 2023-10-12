@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+// Resets to initial state.
 void Chip8::reset() {
     memory.reset();
     keypad.reset();
@@ -16,16 +17,19 @@ void Chip8::reset() {
     sound_timer = 0;
 }
 
+// Loads the data of a given file to the memory
 void Chip8::load_rom(std::string filename) {
     memory.load_rom(filename);
 }
 
+// Decrements the delay timer if it is above 0.
 void Chip8::update_delay_timer() {
     if (delay_timer > 0) {
         delay_timer--;
     }
 }
 
+// Decrements the sound timer if it is above 0.
 bool Chip8::update_sound_timer() {
     if (sound_timer > 0) {
         sound_timer--;
@@ -33,10 +37,12 @@ bool Chip8::update_sound_timer() {
     return sound_timer > 0;
 }
 
+// Sets a given key in the underlying keyboard.
 void Chip8::set_key(int key, int val) {
     keypad[key] = val;
 }
 
+// Fetch, decode and execute the instruction at the current program counter.
 void Chip8::tick() {
     // Fetch
     auto opcode = memory[pc] << 8 | memory[pc + 1];
@@ -52,7 +58,6 @@ void Chip8::tick() {
     // Execute
     pc += 2;
 
-    // TODO: maybe put this in a separate function
     switch (type) {
         case 0x00:
             switch (nnn) {
@@ -145,11 +150,11 @@ void Chip8::tick() {
     }
 }
 
+// Returns the pixel at the given index.
 uint8_t Chip8::get_pixel(int i) {
     return display[i];
 }
 
-// CLS: Clear the display.
 void Chip8::cls() {
     // std::cout << __func__ << std::endl;
     display.clear();

@@ -8,6 +8,7 @@ Window::~Window() {
     SDL_Quit();
 }
 
+// Sets up a SDL window.
 bool Window::init(int width, int height, std::string title) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
@@ -26,8 +27,8 @@ bool Window::init(int width, int height, std::string title) {
     return true;
 }
 
-void Window::poll_events(const std::function<void(int, int)>& on_key) {
-    // TODO: change this
+// Poll for input.
+void Window::poll_events(Chip8* chip8) {
     SDL_Event event;
 
     while (SDL_PollEvent(&event) != 0) {
@@ -35,10 +36,13 @@ void Window::poll_events(const std::function<void(int, int)>& on_key) {
             running = false;
         }
         if (event.type == SDL_KEYDOWN) {
-            on_key(event.key.keysym.sym, 1);
+            if (event.key.keysym.sym == SDLK_ESCAPE) {
+                running = false;
+            }
+            chip8->set_key(event.key.keysym.sym, 1);
         }
         if (event.type == SDL_KEYUP) {
-            on_key(event.key.keysym.sym, 0);
+            chip8->set_key(event.key.keysym.sym, 0);
         }
     }
 }

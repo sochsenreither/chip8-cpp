@@ -8,11 +8,13 @@
 
 class Engine {
    public:
-    bool init();
+    [[nodiscard]] bool init(int cycles = 10, float fps = 60.0);
     void load_rom(std::string filename);
     void start();
 
    private:
+    int cycles_per_second;
+    float frames_per_second;
     Chip8 chip8;
     Window window;
 

@@ -32,6 +32,7 @@ class Chip8 {
     Keypad keypad;
 
     // Instructions
+
     void cls();
     void ret();
     void jmp(int nnn);

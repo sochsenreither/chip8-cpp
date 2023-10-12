@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include "../core/chip8.h"
 
 #include <string>
 
@@ -12,7 +13,7 @@ class Window {
 
     [[nodiscard]] bool init(int width, int height, std::string title);
 
-    void poll_events(const std::function<void(int, int)>& on_key);
+    void poll_events(Chip8* chip8);
     void render();
     void clear_screen();
     void draw_pixel(int x, int y, int scale);

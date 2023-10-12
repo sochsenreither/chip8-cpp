@@ -7,10 +7,12 @@ void Memory::reset() {
     load_sprites();
 }
 
+// Copys the sprites into the memory.
 void Memory::load_sprites() {
     std::copy(begin(sprites), end(sprites), begin(memory));
 }
 
+// Loads a rom into memory starting at the offset.
 void Memory::load_rom(std::string filename) {
     // Check for valid file path
     std::ifstream file(filename);
