@@ -5,6 +5,8 @@
 
 class Memory {
    public:
+    static constexpr int offset = 0x200;
+    
     Memory() {
         reset();
     }
@@ -18,7 +20,6 @@ class Memory {
 
    private:
     std::array<uint8_t, 0x1000> memory = {0};
-    static constexpr int offset = 0x200;
     static constexpr std::array<uint8_t, 0x50> sprites = {
         0xF0, 0x90, 0x90, 0x90, 0xF0,  // 0
         0x20, 0x60, 0x20, 0x20, 0x70,  // 1
